@@ -7,28 +7,20 @@
 		<style></style>
 	</head>
 	<body class="bg-slate-100">
-		<h1 class="capitalize text-center">welcome</h1>
+		<!-- header -->
+		<h1 class="capitalize text-center">snake game</h1>
 		<hr />
+		<!-- main game area -->
 		<canvas
-			id="myCanvas"
-			width="500"
-			height="500"
-			style="border: 1px solid #d3d3d3">
-			Your browser does not support the HTML canvas tag.</canvas
-		>
-
+			id="gameCanvas"
+			width="400"
+			height="400"></canvas>
+		<!-- logics -->
+		<script src="snake.js"></script>
 		<hr />
+		<!-- footer -->
 		<div class="text-center font-bold text-3xl text-green-500">
 			Score : <span id="score">0</span>
 		</div>
-
-		<p>Final score</p>
 	</body>
-	<script>
-		var c = document.getElementById('myCanvas');
-		var ctx = c.getContext('2d');
-		ctx.beginPath();
-		ctx.arc(200, 200, 200, 0, 2 * Math.PI);
-		ctx.stroke();
-	</script>
 </html>
