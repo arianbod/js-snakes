@@ -6,9 +6,9 @@ console.log(
 );
 let gameState = 'notStarted'
 let moveIntervalTime = 200; // Initial interval in milliseconds
-const speedIncreaseFactor = 0.96; // Speed increase factor (less than 1 to increase speed)
+const speedIncreaseFactor = 0.94; // Speed increase factor (less than 1 to increase speed)
 const growthScoreThreshold = 10; // Score interval at which the snake grows
-const minIntervalTime = 100; // Minimum interval time in milliseconds
+const minIntervalTime = 50; // Minimum interval time in milliseconds
 
 let apples = [
     {
@@ -19,6 +19,15 @@ let apples = [
         x: Math.floor((Math.random() * (canvas.width - 20)) / 10) * 10,
         y: Math.floor((Math.random() * (canvas.height - 20)) / 10) * 10,
     },
+    {
+        x: Math.floor((Math.random() * (canvas.width - 20)) / 10) * 10,
+        y: Math.floor((Math.random() * (canvas.height - 20)) / 10) * 10,
+    },
+    {
+        x: Math.floor((Math.random() * (canvas.width - 20)) / 10) * 10,
+        y: Math.floor((Math.random() * (canvas.height - 20)) / 10) * 10,
+    }
+    ,
     {
         x: Math.floor((Math.random() * (canvas.width - 20)) / 10) * 10,
         y: Math.floor((Math.random() * (canvas.height - 20)) / 10) * 10,
@@ -233,8 +242,8 @@ function moveSnake() {
     snake.pop() //remove the last element of array
     // Check collision with the apple
     apples.forEach((apple, index) => {
-        if (snake[0].x >= apple.x && snake[0].x < apple.x + 20 && snake[0].y >= apple.y && snake[0].y < apple.y + 20) {
-            score += 50; // Increase score
+        if (snake[0].x >= apple.x - 20 && snake[0].x <= apple.x + 20 && snake[0].y >= apple.y - 20 && snake[0].y <= apple.y + 20) {
+            score += 200; // Increase score
             document.getElementById('score').textContent = score; // Update score display
             moveApple(index); // Move this apple to a new location
             growSnake(); // Grow the snake
@@ -246,6 +255,45 @@ function moveSnake() {
     setScore(1)
     if (checkBoundries(head)) {
         gameover()
+    }
+}
+
+// Function to handle touch events
+function handleTouch(event) {
+    // Prevent default touch behavior (e.g., scrolling)
+    event.preventDefault();
+
+    // Get the touch position relative to the canvas
+    const touchX = event.touches[0].clientX - canvas.getBoundingClientRect().left;
+    const touchY = event.touches[0].clientY - canvas.getBoundingClientRect().top;
+
+    // Determine the direction based on touch position
+    const headX = snake[0].x;
+    const headY = snake[0].y;
+
+    // Calculate the horizontal and vertical distances between touch position and snake head
+    const deltaX = touchX - headX;
+    const deltaY = touchY - headY;
+
+    // Determine the absolute value of deltaX and deltaY to determine the dominant direction
+    const absDeltaX = Math.abs(deltaX);
+    const absDeltaY = Math.abs(deltaY);
+
+    // Set the snake direction based on the dominant touch direction
+    if (absDeltaX > absDeltaY) {
+        // Horizontal swipe
+        if (deltaX > 0 && direction !== 'left') {
+            changeDirection('right');
+        } else if (deltaX < 0 && direction !== 'right') {
+            changeDirection('left');
+        }
+    } else {
+        // Vertical swipe
+        if (deltaY > 0 && direction !== 'up') {
+            changeDirection('down');
+        } else if (deltaY < 0 && direction !== 'down') {
+            changeDirection('up');
+        }
     }
 }
 
@@ -315,6 +363,10 @@ function resizeCanvas() {
 resizeCanvas();
 //resetGame
 // Add an event listener to resize the canvas when the window is resized
+// Add event listener for touch events
+canvas.addEventListener('touchstart', handleTouch);
+canvas.addEventListener('touchmove', handleTouch);
+
 window.addEventListener('resize', resizeCanvas);
 // call the setup function
 document.getElementById('resetGameButton').addEventListener('click', resetGame)
