@@ -283,16 +283,16 @@ function handleTouch(event) {
     if (absDeltaX > absDeltaY) {
         // Horizontal swipe
         if (deltaX > 0 && direction !== 'left') {
-            changeDirection('right');
+            direction = 'right';
         } else if (deltaX < 0 && direction !== 'right') {
-            changeDirection('left');
+            direction = 'left';
         }
     } else {
         // Vertical swipe
         if (deltaY > 0 && direction !== 'up') {
-            changeDirection('down');
+            direction = 'down';
         } else if (deltaY < 0 && direction !== 'down') {
-            changeDirection('up');
+            direction = 'up';
         }
     }
 }
